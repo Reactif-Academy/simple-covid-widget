@@ -26,7 +26,7 @@ const getGlobalData = () => {
             section.getElementsByClassName('recover_count')[0].innerText = recovered.value.toLocaleString()
             section.getElementsByClassName('death_count')[0].innerText = deaths.value.toLocaleString()
         
-            // set date
+            // set date 
             document.getElementById('last_update').innerText = formatDate(lastUpdate)
         })
 }
