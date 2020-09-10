@@ -1,6 +1,7 @@
 const main = () => {
     getGlobalData();
     getIndonesiaData();
+    getDataTable();
 }
 
 const formatDate = (date) => {
@@ -45,6 +46,72 @@ const getIndonesiaData = () => {
             section.getElementsByClassName('recover_count')[0].innerText = recovered.value.toLocaleString()
             section.getElementsByClassName('death_count')[0].innerText = deaths.value.toLocaleString()
         })
+}
+
+const getDataTable = () => {
+    const URL = "https://covid19.mathdro.id/api/confirmed";
+    let section = document.getElementById('section_table');
+    let table = section.getElementsByTagName('table')[0];
+    let countries = {};
+
+    fetch(URL)
+        .then(resp => resp.json())
+        .then(data => {
+            data.map(data_row => {
+                let {combinedKey, countryRegion, confirmed, recovered, deaths} = data_row;
+                if(countries[countryRegion] == undefined) {
+                    countries[countryRegion] = {
+                        "c": confirmed,
+                        "r": recovered,
+                        "d": deaths
+                    }
+                } else {
+                    countries[countryRegion]['c'] += confirmed || 0;
+                    countries[countryRegion]['r'] += recovered || 0;
+                    countries[countryRegion]['d'] += deaths || 0;
+                }
+            });
+        })
+        .then(() => {
+
+            // obj to array
+            let arr_countries = [];
+            Object.keys(countries).forEach((key) => {
+                arr_countries.push({
+                    "name": key,
+                    "c": countries[key]['c'],
+                    "d": countries[key]['d'],
+                    "r": countries[key]['r'],
+                })
+            });
+
+            // sort 'kasus positif terbanyak'
+            arr_countries.sort((a,b) => b.c - a.c);
+
+            arr_countries.map((country, idx) => {
+                let {name, c, d, r} = country;
+
+                let row = table.insertRow();
+                row.insertCell().innerText = idx + 1
+                row.insertCell().innerText = name
+                row.insertCell().innerText = c.toLocaleString()
+                row.insertCell().innerText = r.toLocaleString()
+                row.insertCell().innerText = d.toLocaleString()
+            });
+        });
+        // .then(data => {
+        //     data.map((data_row, idx) => {
+        //         let {combinedKey, countryRegion, confirmed, recovered, deaths} = data_row;
+
+        //         let row = table.insertRow();
+        //         row.insertCell().innerText = idx + 1
+        //         row.insertCell().innerText = combinedKey
+        //         row.insertCell().innerText = countryRegion
+        //         row.insertCell().innerText = confirmed.toLocaleString()
+        //         row.insertCell().innerText = recovered.toLocaleString()
+        //         row.insertCell().innerText = deaths.toLocaleString()
+        //     });
+        // })
 }
 
 const init_interactive = (id) => {
