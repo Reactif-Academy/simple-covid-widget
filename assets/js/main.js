@@ -99,19 +99,6 @@ const getDataTable = () => {
                 row.insertCell().innerText = d.toLocaleString()
             });
         });
-        // .then(data => {
-        //     data.map((data_row, idx) => {
-        //         let {combinedKey, countryRegion, confirmed, recovered, deaths} = data_row;
-
-        //         let row = table.insertRow();
-        //         row.insertCell().innerText = idx + 1
-        //         row.insertCell().innerText = combinedKey
-        //         row.insertCell().innerText = countryRegion
-        //         row.insertCell().innerText = confirmed.toLocaleString()
-        //         row.insertCell().innerText = recovered.toLocaleString()
-        //         row.insertCell().innerText = deaths.toLocaleString()
-        //     });
-        // })
 }
 
 const init_interactive = (id) => {
